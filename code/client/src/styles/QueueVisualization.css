@@ -1,0 +1,304 @@
+.qv-outer {}
+
+.qv-card {
+    padding: 22px;
+}
+
+.qv-legend {
+    display: flex;
+    gap: 12px;
+}
+
+.qvl-item {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-secondary);
+}
+
+.qvl-item::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.qvl-item--serving::before {
+    background: var(--accent-cyan);
+}
+
+.qvl-item--waiting::before {
+    background: var(--accent-amber);
+}
+
+.qvl-item--idle::before {
+    background: var(--text-muted);
+}
+
+.qv-diagram {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 0;
+    flex-wrap: wrap;
+}
+
+.qv-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 80px;
+}
+
+.qv-col-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 600;
+}
+
+.qv-arrow {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Arrivals */
+.qv-arrivals {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.qv-arrival-stream {
+    display: flex;
+    gap: 5px;
+}
+
+.qv-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    opacity: 0;
+    animation: fadeIn 1.2s ease-in-out infinite;
+}
+
+.qv-arrival-rate {
+    font-size: 0.68rem;
+    color: var(--accent-cyan);
+    font-family: 'Courier New', monospace;
+}
+
+/* Queue column */
+.qv-queue-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 110px;
+    max-width: 130px;
+}
+
+.qv-empty-queue {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    padding: 8px;
+    border: 1px dashed var(--border-subtle);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.qv-overflow {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 3px 0;
+}
+
+/* Patient chip */
+.qv-patient-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 9px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+}
+
+.qv-chip-id {
+    font-size: 0.7rem;
+    color: var(--accent-amber);
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.qv-chip-wait {
+    font-size: 0.66rem;
+    color: var(--text-muted);
+    flex: 1;
+}
+
+.qv-chip-priority {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Servers */
+.qv-servers {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 150px;
+}
+
+.qv-server {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 11px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    position: relative;
+}
+
+.qv-server--busy {
+    background: var(--accent-cyan-dim);
+    border-color: var(--border-active);
+}
+
+.qv-server--idle {
+    background: var(--bg-secondary);
+}
+
+.qv-server--busy .qv-srv-icon {
+    color: var(--accent-cyan);
+}
+
+.qv-server--idle .qv-srv-icon {
+    color: var(--text-muted);
+}
+
+.qv-srv-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.qv-srv-name {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+.qv-srv-patient {
+    font-size: 0.68rem;
+    color: var(--accent-cyan);
+    font-family: 'Courier New', monospace;
+}
+
+.qv-srv-idle {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+
+.qv-srv-util {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.qv-srv-pulse {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: pulse-glow 1.6s ease-in-out infinite;
+}
+
+/* Departures */
+.qv-depart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 16px;
+    background: rgba(0, 229, 160, 0.06);
+    border: 1px solid rgba(0, 229, 160, 0.2);
+    border-radius: var(--radius-sm);
+}
+
+.qv-depart-count {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent-green);
+}
+
+.qv-depart-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+
+.qv-depart-rate {
+    font-size: 0.68rem;
+    color: var(--accent-green);
+    font-family: 'Courier New', monospace;
+}
+
+/* Stats strip */
+.qv-stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.qv-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.qv-stat-val {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.qv-stat-lbl {
+    font-size: 0.67rem;
+    color: var(--text-muted);
+}
+
+.mc-title {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+@media (max-width: 800px) {
+    .qv-diagram {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .qv-arrow {
+        transform: rotate(90deg);
+    }
+}

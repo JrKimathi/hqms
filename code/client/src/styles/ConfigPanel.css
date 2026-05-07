@@ -1,0 +1,228 @@
+.config-panel {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.kendall-tag {
+    font-size: 0.72rem;
+    font-family: 'Courier New', monospace;
+    color: var(--accent-teal);
+    background: rgba(0, 180, 160, 0.1);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.cp-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.cp-slider {}
+
+.cp-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cp-slider-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.cp-slider-val {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.cp-slider-val--cyan {
+    color: var(--accent-cyan);
+}
+
+.cp-slider-val--teal {
+    color: var(--accent-teal);
+}
+
+.cp-slider-val--amber {
+    color: var(--accent-amber);
+}
+
+.cp-slider-val--green {
+    color: var(--accent-green);
+}
+
+.cp-slider-unit {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    font-family: var(--font-body);
+}
+
+.cp-range {
+    width: 100%;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--bg-secondary);
+    outline: none;
+    cursor: pointer;
+}
+
+.cp-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-card);
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.cp-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.cp-range--cyan::-webkit-slider-thumb {
+    background: var(--accent-cyan);
+    box-shadow: 0 0 8px var(--accent-cyan-glow);
+}
+
+.cp-range--teal::-webkit-slider-thumb {
+    background: var(--accent-teal);
+}
+
+.cp-range--amber::-webkit-slider-thumb {
+    background: var(--accent-amber);
+}
+
+.cp-range--green::-webkit-slider-thumb {
+    background: var(--accent-green);
+}
+
+.cp-slider-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.cp-section-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.cp-disc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.cp-disc-btn {
+    padding: 8px 4px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.cp-disc-btn:hover {
+    border-color: var(--border-active);
+    color: var(--text-primary);
+}
+
+.cp-disc-btn--active {
+    background: var(--accent-cyan-dim);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+}
+
+.cp-disc-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    min-height: 42px;
+}
+
+.cp-derived {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 18px;
+}
+
+.cp-derived-title {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.cp-derived-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.cp-di {
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: relative;
+}
+
+.cp-di--warn {
+    border-color: rgba(255, 95, 109, 0.4);
+    background: rgba(255, 95, 109, 0.05);
+}
+
+.cp-di-val {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.cp-di--warn .cp-di-val {
+    color: var(--accent-red);
+}
+
+.cp-di-lbl {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.cp-di-badge {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    font-size: 0.58rem;
+    background: var(--accent-red);
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 20px;
+    font-weight: 700;
+}

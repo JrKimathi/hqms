@@ -1,0 +1,114 @@
+.file-uploader {
+    border: 2px dashed var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 52px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all var(--transition-mid);
+    background: var(--bg-card);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    outline: none;
+}
+
+.file-uploader:hover,
+.file-uploader--over {
+    border-color: var(--accent-cyan);
+    background: var(--accent-cyan-dim);
+}
+
+.file-uploader--over::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    animation: shimmer 1.5s ease-in-out infinite;
+    background-size: 400px 2px;
+}
+
+.file-uploader--parsing {
+    cursor: wait;
+    pointer-events: none;
+}
+
+.fu-icon-wrap {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.fu-icon-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-active);
+    background: var(--accent-cyan-dim);
+}
+
+.fu-icon {
+    position: relative;
+}
+
+.fu-title {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.fu-link {
+    color: var(--accent-cyan);
+}
+
+.fu-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.fu-badges {
+    display: flex;
+    gap: 6px;
+}
+
+.fu-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 2px 9px;
+    border-radius: 20px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    font-family: var(--font-display);
+}
+
+.fu-parsing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.fu-spinner {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--border-subtle);
+    border-top-color: var(--accent-cyan);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+.fu-parsing-text {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}

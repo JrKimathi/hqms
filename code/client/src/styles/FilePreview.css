@@ -1,0 +1,151 @@
+.file-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.fp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.fp-title {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.fp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--transition-fast);
+}
+
+.fp-item:hover {
+    border-color: var(--border-active);
+}
+
+.fp-item--warn {
+    border-color: rgba(255, 179, 71, 0.3);
+}
+
+.fp-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.fp-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.fp-name {
+    font-size: 0.84rem;
+    color: var(--text-primary);
+}
+
+.fp-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.fp-size {
+    font-size: 0.71rem;
+    color: var(--text-muted);
+}
+
+.fp-records {
+    font-size: 0.71rem;
+    color: var(--accent-teal);
+    font-family: 'Courier New', monospace;
+}
+
+.fp-errors {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 2px;
+}
+
+.fp-error {
+    font-size: 0.7rem;
+    color: var(--accent-amber);
+}
+
+.fp-status {
+    font-size: 0.72rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    align-self: flex-start;
+    padding-top: 2px;
+}
+
+.fp-status--ready {
+    color: var(--accent-green);
+}
+
+.fp-status--error {
+    color: var(--accent-red);
+}
+
+.fp-status--parsing {
+    color: var(--accent-amber);
+}
+
+.fp-remove {
+    background: none;
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: all var(--transition-fast);
+    align-self: flex-start;
+}
+
+.fp-remove:hover {
+    color: var(--accent-red);
+    background: rgba(255, 95, 109, 0.1);
+}
+
+.fp-submit {
+    margin-top: 6px;
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 0.9rem;
+}
+
+.fp-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.fp-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(6, 12, 20, 0.3);
+    border-top-color: var(--bg-primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 2px;
+}

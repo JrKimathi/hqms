@@ -1,0 +1,224 @@
+.insights-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ip-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+}
+
+.ip-empty-icon {
+    font-size: 1.8rem;
+    opacity: 0.5;
+}
+
+.ip-card {
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all var(--transition-mid);
+}
+
+.ip-card:hover {
+    border-color: var(--border-active);
+}
+
+.ip-card--open {
+    border-color: var(--border-active);
+    background: var(--bg-card-hover);
+    box-shadow: 0 4px 24px rgba(0, 212, 255, 0.06);
+}
+
+.ip-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: none;
+    cursor: pointer;
+    margin-bottom: 8px;
+    gap: 12px;
+}
+
+.ip-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ip-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.ip-cat {
+    font-size: 0.67rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    font-family: var(--font-display);
+}
+
+.ip-cat--cyan {
+    background: var(--accent-cyan-dim);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.ip-cat--green {
+    background: rgba(0, 229, 160, 0.1);
+    color: var(--accent-green);
+    border: 1px solid rgba(0, 229, 160, 0.2);
+}
+
+.ip-cat--amber {
+    background: rgba(255, 179, 71, 0.1);
+    color: var(--accent-amber);
+    border: 1px solid rgba(255, 179, 71, 0.2);
+}
+
+.ip-cat--teal {
+    background: rgba(0, 180, 160, 0.1);
+    color: var(--accent-teal);
+    border: 1px solid rgba(0, 180, 160, 0.2);
+}
+
+.ip-cat--red {
+    background: rgba(255, 95, 109, 0.1);
+    color: var(--accent-red);
+    border: 1px solid rgba(255, 95, 109, 0.2);
+}
+
+.ip-priority {
+    font-size: 0.7rem;
+}
+
+.ip-priority--high {
+    color: var(--accent-red);
+}
+
+.ip-priority--medium {
+    color: var(--accent-amber);
+}
+
+.ip-priority--low {
+    color: var(--accent-green);
+}
+
+.ip-impact-preview {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    font-family: var(--font-display);
+    opacity: 0.8;
+}
+
+.ip-card--open .ip-impact-preview {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ip-chevron {
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+
+.ip-chevron--open {
+    transform: rotate(180deg);
+    color: var(--accent-cyan);
+}
+
+.ip-title {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    text-align: left;
+}
+
+.ip-body {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ip-text {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    line-height: 1.68;
+    font-weight: 300;
+}
+
+.ip-chips {
+    display: flex;
+    gap: 10px;
+}
+
+.ip-chip {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 13px;
+    border-radius: var(--radius-sm);
+    border: 1px solid;
+}
+
+.ip-chip--impact {
+    background: var(--accent-cyan-dim);
+    border-color: var(--border-active);
+}
+
+.ip-chip--effort {
+    background: var(--bg-secondary);
+    border-color: var(--border-subtle);
+}
+
+.ip-chip--effort-low {
+    border-color: rgba(0, 229, 160, 0.25);
+}
+
+.ip-chip--effort-medium {
+    border-color: rgba(255, 179, 71, 0.25);
+}
+
+.ip-chip--effort-high {
+    border-color: rgba(255, 95, 109, 0.25);
+}
+
+.ip-chip-label {
+    font-size: 0.63rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.ip-chip-value {
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.ip-chip--effort .ip-chip-value {
+    color: var(--text-primary);
+}
+
+.ip-apply-btn {
+    align-self: flex-start;
+    font-size: 0.82rem;
+    padding: 9px 18px;
+}
