@@ -3,8 +3,8 @@
  * Discrete-event M/M/c simulation engine.
  * Runs entirely in-browser via a priority-queue event loop.
  */
-import { SimulationConfig, SimulationEvent, DerivedMetrics } from '../types/simulation';
-import {
+import type { SimulationConfig, SimulationEvent, DerivedMetrics } from '../types/simulation';
+import type {
   SimulationResult, WaitTimeBucket, HourlyDataPoint,
   PatientRecord, ServerStats
 } from '../types/results';

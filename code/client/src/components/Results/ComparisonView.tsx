@@ -3,8 +3,8 @@
  * Side-by-side scenario comparison table + verdict card.
  */
 import React from 'react';
-import { ComparisonRow, SimulationResult } from '../../types/results';
-import './ComparisonView.css';
+import type { ComparisonRow, SimulationResult } from '../../types/results';
+import './../../styles/ComparisonView.css';
 
 interface ComparisonViewProps {
   rows: ComparisonRow[];

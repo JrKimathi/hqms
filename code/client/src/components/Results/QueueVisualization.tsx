@@ -1,11 +1,7 @@
-/**
- * MetricsCards.tsx
- * KPI summary cards + wait time distribution + Erlang-C table + patient flow breakdown.
- */
 import React from 'react';
-import { SimulationResult } from '../../types/results';
+import type { SimulationResult } from '../../types/results';
 import { formatDuration, formatPct } from '../../utils/formatters';
-import './MetricsCards.css';
+import '../../styles/MetricsCard.css';
 
 interface MetricsCardsProps {
   result: SimulationResult;

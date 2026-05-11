@@ -1,18 +1,16 @@
-/**
- * useSimulation.ts
- * React hook that orchestrates running the simulation engine
- * and syncing results to the Zustand store.
- */
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useMemo } from 'react';
 import { useSimulationStore } from '../store/simulationStore';
-import { runSimulation, computeDerivedMetrics } from '../services/simulationService';
-import { SimulationConfig, SimulationRun, DerivedMetrics } from '../types/simulation';
+import type { SimulationConfig, SimulationRun } from '../types/simulation';
+import { post } from '../services/api';
+import type { SimulationResult } from '../types/results';
+import { computeDerivedMetrics } from '../services/simulationService';
 
 export function useSimulation() {
   const store = useSimulationStore();
   const abortRef = useRef(false);
 
-  const derived: DerivedMetrics = computeDerivedMetrics(store.config);
+  // Compute derived metrics from current config
+  const derived = useMemo(() => computeDerivedMetrics(store.config), [store.config]);
 
   const start = useCallback(async (overrideConfig?: Partial<SimulationConfig>) => {
     abortRef.current = false;
@@ -32,9 +30,9 @@ export function useSimulation() {
     store.setCurrentRun(run);
 
     try {
-      const result = await runSimulation(config, (pct) => {
-        if (!abortRef.current) store.updateRunProgress(pct);
-      });
+      const response = await post<SimulationResult>('/simulate', config);
+      const result = response.data;
+
       if (!abortRef.current) {
         result.scenarioName = run.scenarioName;
         result.runId = run.id;
@@ -42,8 +40,11 @@ export function useSimulation() {
       }
     } catch (err) {
       console.error('Simulation error:', err);
+      alert('Simulation failed. Make sure the backend is running (python main.py)');
       store.setCurrentRun({ ...run, status: 'error', progress: 0 });
     }
+
+
   }, [store]);
 
   const abort = useCallback(() => {
@@ -54,21 +55,22 @@ export function useSimulation() {
   }, [store]);
 
   return {
-    config:       store.config,
-    setServers:   store.setServers,
+    config: store.config,
+    setServers: store.setServers,
     setArrivalRate: store.setArrivalRate,
     setServiceTime: store.setServiceTime,
     setSimDuration: store.setSimDuration,
-    setDiscipline:  store.setDiscipline,
-    scenarios:      store.scenarios,
+    setDiscipline: store.setDiscipline,
+    scenarios: store.scenarios,
     activeScenarioId: store.activeScenarioId,
     setActiveScenario: store.setActiveScenario,
-    loadScenario:   store.loadScenario,
-    addScenario:    store.addScenario,
-    currentRun:     store.currentRun,
-    isRunning:      store.currentRun?.status === 'running',
-    isDone:         store.currentRun?.status === 'complete',
-    progress:       store.currentRun?.progress ?? 0,
+    loadScenario: store.loadScenario,
+    addScenario: store.addScenario,
+    removeScenario: store.removeScenario, 
+    currentRun: store.currentRun,
+    isRunning: store.currentRun?.status === 'running',
+    isDone: store.currentRun?.status === 'complete',
+    progress: store.currentRun?.progress ?? 0,
     derived,
     start,
     abort,

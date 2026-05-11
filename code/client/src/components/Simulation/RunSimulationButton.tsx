@@ -1,9 +1,5 @@
-/**
- * RunSimulationButton.tsx
- * Primary CTA button with animated progress bar and log output.
- */
 import React from 'react';
-import './RunSimulationButton.css';
+import '../../styles/RunSimulationButton.css';
 
 interface RunSimulationButtonProps {
   isRunning: boolean;
@@ -13,10 +9,11 @@ interface RunSimulationButtonProps {
   onAbort?: () => void;
   onViewResults?: () => void;
   logLines?: string[];
+  disabled?: boolean;
 }
 
 const RunSimulationButton: React.FC<RunSimulationButtonProps> = ({
-  isRunning, isDone, progress, onRun, onAbort, onViewResults, logLines = [],
+  isRunning, isDone, progress, onRun, onAbort, onViewResults, logLines = [], disabled
 }) => (
   <div className="rsb-wrap">
     {/* Progress */}
@@ -39,7 +36,7 @@ const RunSimulationButton: React.FC<RunSimulationButtonProps> = ({
       <button
         className={`btn btn-primary rsb-btn ${isRunning ? 'rsb-btn--running' : ''}`}
         onClick={onRun}
-        disabled={isRunning}
+        disabled={isRunning || disabled}
       >
         {isRunning ? (
           <><span className="rsb-spinner" /> Running…</>

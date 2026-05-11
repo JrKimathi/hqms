@@ -1,11 +1,7 @@
-/**
- * ConfigPanel.tsx
- * Parameter sliders wired to the simulation store.
- * Displays live Erlang-C derived metrics below the sliders.
- */
 import React from 'react';
-import { DerivedMetrics, SimulationConfig, QueueDiscipline } from '../../types/simulation';
-import './ConfigPanel.css';
+import type { DerivedMetrics, SimulationConfig, QueueDiscipline } from '../../types/simulation';
+import '../../styles/ConfigPanel.css';
+
 
 interface ConfigPanelProps {
   config: SimulationConfig;

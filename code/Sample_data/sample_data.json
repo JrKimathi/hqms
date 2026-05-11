@@ -1,0 +1,47 @@
+[
+  {
+    "patient_id": "ANON-0001",
+    "arrival_time": "08:05",
+    "service_start": "08:12",
+    "service_end": "08:18",
+    "department": "Emergency",
+    "priority": 5,
+    "server_id": 1
+  },
+  {
+    "patient_id": "ANON-0002",
+    "arrival_time": "08:12",
+    "service_start": "08:15",
+    "service_end": "08:25",
+    "department": "Outpatient",
+    "priority": 2,
+    "server_id": 2
+  },
+  {
+    "patient_id": "ANON-0003",
+    "arrival_time": "08:18",
+    "service_start": "08:20",
+    "service_end": "08:30",
+    "department": "Radiology",
+    "priority": 3,
+    "server_id": 1
+  },
+  {
+    "patient_id": "ANON-0004",
+    "arrival_time": "08:22",
+    "service_start": "08:28",
+    "service_end": "08:35",
+    "department": "Emergency",
+    "priority": 4,
+    "server_id": 3
+  },
+  {
+    "patient_id": "ANON-0005",
+    "arrival_time": "08:28",
+    "service_start": "08:30",
+    "service_end": "08:42",
+    "department": "Pharmacy",
+    "priority": 1,
+    "server_id": 2
+  }
+]

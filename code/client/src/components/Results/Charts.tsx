@@ -5,8 +5,8 @@
  * Zero external dependencies — pure SVG/CSS.
  */
 import React from 'react';
-import { SimulationResult } from '../../types/results';
-import './Charts.css';
+import type { SimulationResult } from '../../types/results';
+import '../../styles/Charts.css';
 
 interface ChartsProps { result: SimulationResult; }
 

@@ -3,7 +3,7 @@
  * Drag-and-drop zone wired to useUpload hook.
  */
 import React from 'react';
-import './FileUploader.css';
+import "../../styles/UploadPage.css";
 
 interface FileUploaderProps {
   isDragOver: boolean;

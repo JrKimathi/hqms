@@ -4,8 +4,8 @@
  * Install: npm install zustand
  */
 import { create } from 'zustand';
-import { SimulationConfig, Scenario, SimulationRun, QueueDiscipline } from '../types/simulation';
-import { SimulationResult } from '../types/results';
+import type { SimulationConfig, Scenario, SimulationRun, QueueDiscipline } from '../types/simulation';
+import type { SimulationResult } from '../types/results';
 
 const DEFAULT_CONFIG: SimulationConfig = {
   servers: 3,

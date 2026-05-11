@@ -1,11 +1,8 @@
-/**
- * FilePreview.tsx
- * List of uploaded files with parse status, size, and remove button.
- */
 import React from 'react';
-import { UploadedFile } from '../../services/uploadService';
+import type { UploadedFile } from '../../services/uploadService';
 import { formatBytes } from '../../utils/formatters';
-import './FilePreview.css';
+import "../../styles/UploadPage.css";
+import '../../styles/FilePreview.css'; 
 
 interface FilePreviewProps {
   files: File[];

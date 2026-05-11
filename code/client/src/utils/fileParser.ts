@@ -2,7 +2,7 @@
  * fileParser.ts
  * Parses CSV / JSON hospital queue data files into PatientRecord arrays.
  */
-import { PatientRecord } from '../types/results';
+import type { PatientRecord } from '../types/results';
 
 export interface ParseResult {
   records: PatientRecord[];
@@ -18,11 +18,11 @@ export interface RawRow {
   service_end?: string;
   department?: string;
   priority?: string;
+  server_id?: string;
   [key: string]: string | undefined;
 }
 
 // ─── CSV ─────────────────────────────────────────────────────────────────────
-
 export function parseCSV(text: string): RawRow[] {
   const lines = text.trim().split('\n').filter(Boolean);
   if (lines.length < 2) return [];
@@ -36,7 +36,6 @@ export function parseCSV(text: string): RawRow[] {
 }
 
 // ─── JSON ────────────────────────────────────────────────────────────────────
-
 export function parseJSON(text: string): RawRow[] {
   try {
     const data = JSON.parse(text);
@@ -47,9 +46,7 @@ export function parseJSON(text: string): RawRow[] {
 }
 
 // ─── Validation & mapping ────────────────────────────────────────────────────
-
-function toMinutes(timeStr: string, baseDate?: string): number {
-  // Accepts "HH:MM", "HH:MM:SS", or ISO datetime
+function toMinutes(timeStr: string): number {
   if (!timeStr) return 0;
   const parts = timeStr.includes('T')
     ? timeStr.split('T')[1].split(':')
@@ -64,7 +61,7 @@ export function mapRowToPatient(row: RawRow, index: number): PatientRecord | nul
   const arrival = toMinutes(row.arrival_time ?? '');
   const start   = toMinutes(row.service_start ?? row.start_time ?? '');
   const end     = toMinutes(row.service_end ?? row.end_time ?? '');
-  if (end <= start) return null; // invalid record
+  if (end <= start) return null;
   return {
     id,
     arrivalTime:  arrival,
@@ -79,7 +76,6 @@ export function mapRowToPatient(row: RawRow, index: number): PatientRecord | nul
 }
 
 // ─── Main entry ──────────────────────────────────────────────────────────────
-
 export async function parseFile(file: File): Promise<ParseResult> {
   const text = await file.text();
   const errors: string[] = [];
@@ -90,6 +86,11 @@ export async function parseFile(file: File): Promise<ParseResult> {
     rawRows = parseCSV(text);
   } else if (ext === 'json') {
     rawRows = parseJSON(text);
+  } else if (ext === 'xlsx' || ext === 'xls') {
+    // For Excel, we would need a library; but your backend handles Excel.
+    // If you want client-side Excel parsing, add xlsx library.
+    errors.push(`Client-side Excel parsing not supported. Use backend or convert to CSV.`);
+    return { records: [], errors, rowCount: 0, skippedRows: 0 };
   } else {
     errors.push(`Unsupported file type: .${ext}. Use CSV or JSON.`);
     return { records: [], errors, rowCount: 0, skippedRows: 0 };
@@ -112,7 +113,6 @@ export async function parseFile(file: File): Promise<ParseResult> {
 }
 
 // ─── Anonymisation ───────────────────────────────────────────────────────────
-
 export function anonymiseRecords(records: PatientRecord[]): PatientRecord[] {
   return records.map((r, i) => ({
     ...r,

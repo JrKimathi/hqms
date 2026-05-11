@@ -3,8 +3,9 @@
  * Manages drag-and-drop file upload state and parsing pipeline.
  */
 import { useState, useCallback, useRef } from 'react';
-import { parseFilesLocally, downloadSampleCSV, UploadedFile } from '../services/uploadService';
-import { PatientRecord } from '../types/results';
+import { parseFilesLocally, downloadSampleCSV } from '../services/uploadService';
+import type { UploadedFile } from '../services/uploadService';
+import type { PatientRecord } from '../types/results';
 import { useSimulationStore } from '../store/simulationStore';
 
 export interface UploadState {

@@ -3,8 +3,8 @@
  * Manages the list of simulation scenarios.
  */
 import React, { useState } from 'react';
-import { Scenario } from '../../types/simulation';
-import './ScenarioBuilder.css';
+import type { Scenario } from '../../types/simulation';
+import '../../styles/ScenarioBuilder.css';
 
 interface ScenarioBuilderProps {
   scenarios: Scenario[];

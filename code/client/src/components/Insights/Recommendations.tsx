@@ -5,8 +5,8 @@
  * Derives all numbers from the active SimulationResult.
  */
 import React from 'react';
-import { SimulationResult } from '../../types/results';
-import { Insight } from '../Insights/InsightsPanel';
+import type { SimulationResult } from '../../types/results';
+
 import '../../styles/Recommendations.css';
 
 interface RecommendationsProps {

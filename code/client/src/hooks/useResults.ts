@@ -4,7 +4,7 @@
  */
 import { useMemo } from 'react';
 import { useSimulationStore } from '../store/simulationStore';
-import { SimulationResult, ComparisonRow } from '../types/results';
+import type { SimulationResult, ComparisonRow } from '../types/results';
 import { formatDuration, formatPct, formatDelta } from '../utils/formatters';
 
 export function useResults() {
