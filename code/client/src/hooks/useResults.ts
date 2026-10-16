@@ -4,7 +4,7 @@
  */
 import { useMemo } from 'react';
 import { useSimulationStore } from '../store/simulationStore';
-import type { SimulationResult, ComparisonRow } from '../types/results';
+import type { ComparisonRow } from '../types/results';
 import { formatDuration, formatPct, formatDelta } from '../utils/formatters';
 
 export function useResults() {
@@ -15,7 +15,7 @@ export function useResults() {
     const base = results[0];
     const test = results[results.length - 1];
 
-    const delta = (b: number, t: number, higher = false): string => {
+    const delta = (b: number, t: number ): string => {
       const d = ((t - b) / b) * 100;
       return formatDelta(d);
     };
