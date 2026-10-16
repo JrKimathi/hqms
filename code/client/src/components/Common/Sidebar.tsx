@@ -11,8 +11,8 @@ interface NavItem {
 interface SidebarProps {
   activePage: string;
   onNavigate: (page: string) => void;
-  isOpen: boolean;             // NEW
-  toggleSidebar: () => void;   // NEW
+  isOpen: boolean;
+  toggleSidebar: () => void;
 }
 
 const DashboardIcon = () => (
@@ -55,34 +55,41 @@ const InsightsIcon = () => (
 
 const navItems: NavItem[] = [
   { id: 'dashboard',   label: 'Dashboard',   icon: <DashboardIcon /> },
-  { id: 'upload',      label: 'Upload Data',  icon: <UploadIcon />    },
-  { id: 'simulation',  label: 'Simulation',   icon: <SimIcon />,       badge: 'Run' },
-  { id: 'results',     label: 'Results',      icon: <ResultsIcon />   },
-  { id: 'insights',    label: 'Insights',     icon: <InsightsIcon />  },
+  { id: 'upload',      label: 'Upload Data', icon: <UploadIcon />    },
+  { id: 'simulation',  label: 'Simulation',  icon: <SimIcon />,       badge: 'Run' },
+  { id: 'results',     label: 'Results',     icon: <ResultsIcon />   },
+  { id: 'insights',    label: 'Insights',    icon: <InsightsIcon />  },
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ activePage, onNavigate }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  activePage,
+  onNavigate,
+  isOpen,
+  toggleSidebar,
+}) => {
   return (
-    <aside className="sidebar">
-      <nav className="sidebar-nav">
-        <div className="sidebar-section-label">Navigation</div>
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            className={`sidebar-item ${activePage === item.id ? 'sidebar-item--active' : ''}`}
-            onClick={() => onNavigate(item.id)}
-          >
-            <span className="sidebar-item-icon">{item.icon}</span>
-            <span className="sidebar-item-label">{item.label}</span>
-            
-            {item.badge && <span className="sidebar-item-badge">{item.badge}</span>}
-            {activePage === item.id && <span className="sidebar-item-indicator" />}
-          </button>
-        ))}
-      </nav>
+    <>
+      {/* Mobile backdrop overlay — clicking it closes the drawer */}
+      {isOpen && <div className="sidebar-backdrop" onClick={toggleSidebar} />}
 
-      
-    </aside>
+      <aside className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
+        <nav className="sidebar-nav">
+          <div className="sidebar-section-label">Navigation</div>
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              className={`sidebar-item ${activePage === item.id ? 'sidebar-item--active' : ''}`}
+              onClick={() => onNavigate(item.id)}
+            >
+              <span className="sidebar-item-icon">{item.icon}</span>
+              <span className="sidebar-item-label">{item.label}</span>
+              {item.badge && <span className="sidebar-item-badge">{item.badge}</span>}
+              {activePage === item.id && <span className="sidebar-item-indicator" />}
+            </button>
+          ))}
+        </nav>
+      </aside>
+    </>
   );
 };
 

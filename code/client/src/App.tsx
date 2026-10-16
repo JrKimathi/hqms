@@ -6,7 +6,7 @@ import Dashboard from './pages/Dashboard';
 import UploadPage from './pages/UploadPage';
 import SimulationPage from './pages/SimulationPage';
 import ResultsPage from './pages/ResultsPage';
-import InsightsPage from './components/Insights/InsightsPanel'; 
+import InsightsPage from './components/Insights/InsightsPanel';
 import { useThemeStore } from './store/themeStore';
 
 type Page = 'dashboard' | 'upload' | 'simulation' | 'results' | 'insights';
@@ -21,8 +21,7 @@ const PAGE_LABELS: Record<Page, string> = {
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
-  // NEW: State to manage sidebar visibility on mobile
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);   // sidebar drawer state
 
   const { theme } = useThemeStore();
 
@@ -31,15 +30,12 @@ const App: React.FC = () => {
     document.body.classList.add(theme);
   }, [theme]);
 
-  // NEW: Toggle function
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
 
-  // NEW: Close sidebar on navigation (useful for mobile)
   const handleNavigate = (page: string) => {
     setCurrentPage(page as Page);
-    if (window.innerWidth <= 1024) {
-      setIsSidebarOpen(false);
-    }
+    // Auto-close drawer on mobile after navigation
+    if (window.innerWidth <= 1024) setIsSidebarOpen(false);
   };
 
   const renderPage = () => {
@@ -55,15 +51,15 @@ const App: React.FC = () => {
 
   return (
     <div className="app-shell">
-      <Sidebar 
-        activePage={currentPage} 
-        onNavigate={handleNavigate} 
-        isOpen={isSidebarOpen} 
+      <Sidebar
+        activePage={currentPage}
+        onNavigate={handleNavigate}
+        isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
       />
-      <Navbar 
-        currentPage={PAGE_LABELS[currentPage]} 
-        toggleSidebar={toggleSidebar} 
+      <Navbar
+        currentPage={PAGE_LABELS[currentPage]}
+        toggleSidebar={toggleSidebar}
       />
       <main className="app-main">
         <div className="app-content">
