@@ -1,9 +1,9 @@
 /**
  * simulationService.ts
- * Discrete-event M/M/c simulation engine.
+ * Discrete-event M/M/c simulation engine + trace-driven simulation.
  * Runs entirely in-browser via a priority-queue event loop.
  */
-import type { SimulationConfig, SimulationEvent, DerivedMetrics } from '../types/simulation';
+import type { SimulationConfig, DerivedMetrics } from '../types/simulation';
 import type {
   SimulationResult, WaitTimeBucket, HourlyDataPoint,
   PatientRecord, ServerStats
@@ -51,7 +51,7 @@ function exponential(rate: number): number {
   return -Math.log(1 - Math.random()) / rate;
 }
 
-// ─── Simulation engine ────────────────────────────────────────────────────────
+// ─── Simulation engine (random arrivals) ────────────────────────────────────────
 
 interface EventEntry {
   time: number;
@@ -70,7 +70,6 @@ export async function runSimulation(
   const mu     = 1 / avgSvc;
 
   // State
-  const events: EventEntry[] = [];
   const patientRecords: PatientRecord[] = [];
   const serverBusy: boolean[] = new Array(c).fill(false);
   const serverBusyTime: number[] = new Array(c).fill(0);
@@ -79,14 +78,13 @@ export async function runSimulation(
 
   let now = 0;
   let patientCounter = 0;
-  let nextArrival = exponential(lambda);
   const heap: EventEntry[] = [];
 
   const push = (e: EventEntry) => { heap.push(e); heap.sort((a, b) => a.time - b.time); };
   const pop  = () => heap.shift()!;
 
   // Seed first arrival
-  push({ time: nextArrival, type: 'arrival', patientId: '', priority: 1 });
+  push({ time: exponential(lambda), type: 'arrival', patientId: '', priority: 1 });
 
   const progressInterval = simDuration / 20;
   let lastProgressAt = 0;
@@ -96,11 +94,9 @@ export async function runSimulation(
     now = evt.time;
     if (now > simDuration) break;
 
-    // Progress update (yield control via setTimeout 0 feel — sync but report)
     if (now - lastProgressAt >= progressInterval) {
       onProgress(Math.min((now / simDuration) * 100, 99));
       lastProgressAt = now;
-      // Yield to event loop
       await new Promise(r => setTimeout(r, 0));
     }
 
@@ -110,7 +106,6 @@ export async function runSimulation(
       const priority = Math.ceil(Math.random() * 5);
       const arrTime = now;
 
-      // Find free server
       const freeServer = serverBusy.findIndex(b => !b);
       if (freeServer !== -1) {
         serverBusy[freeServer] = true;
@@ -127,12 +122,9 @@ export async function runSimulation(
         queue.push({ patientId: pid, arrivalTime: arrTime, priority });
         if (discipline === 'Priority') {
           queue.sort((a, b) => b.priority - a.priority);
-        } else if (discipline === 'LIFO') {
-          // already newest last; pop from end
         }
       }
 
-      // Schedule next arrival
       const nextTime = now + exponential(lambda);
       if (nextTime <= simDuration) {
         push({ time: nextTime, type: 'arrival', patientId: '', priority: 1 });
@@ -141,11 +133,9 @@ export async function runSimulation(
       const sid = evt.serverId;
       serverBusy[sid] = false;
 
-      // Record busy time contribution
       const rec = patientRecords.find(r => r.id === evt.patientId);
       if (rec) serverBusyTime[sid] += rec.serviceTime;
 
-      // Serve next from queue
       if (queue.length > 0) {
         const next = discipline === 'LIFO' ? queue.pop()! : queue.shift()!;
         serverBusy[sid] = true;
@@ -167,7 +157,100 @@ export async function runSimulation(
   return buildResult(config, patientRecords, serverBusyTime, serverPatients, simDuration);
 }
 
-// ─── Result builder ───────────────────────────────────────────────────────────
+// ─── Trace‑driven simulation (uses uploaded records) ───────────────────────────
+
+export async function runTraceSimulation(
+  config: SimulationConfig,
+  records: PatientRecord[],
+  onProgress: (pct: number) => void
+): Promise<SimulationResult> {
+  if (records.length === 0) {
+    throw new Error('No patient records provided');
+  }
+
+  const sorted = [...records].sort((a, b) => a.arrivalTime - b.arrivalTime);
+  const duration = config.simDuration;
+  const c = config.servers;
+  const discipline = config.discipline;
+
+  const serverBusy: boolean[] = new Array(c).fill(false);
+  const serverBusyTime: number[] = new Array(c).fill(0);
+  const serverPatients: number[] = new Array(c).fill(0);
+  const queue: PatientRecord[] = [];
+  const completedRecords: PatientRecord[] = [];
+
+  let now = 0;
+  let eventIndex = 0;
+  const heap: { time: number; type: 'arrival' | 'departure'; record: PatientRecord; serverId?: number }[] = [];
+
+  const push = (e: any) => { heap.push(e); heap.sort((a, b) => a.time - b.time); };
+  const pop = () => heap.shift()!;
+
+  if (sorted.length > 0) {
+    push({ time: sorted[0].arrivalTime, type: 'arrival', record: sorted[0] });
+  }
+
+  while (heap.length > 0 && now <= duration) {
+    const evt = pop();
+    now = evt.time;
+    if (now > duration) break;
+
+    if (evt.type === 'arrival') {
+      const rec = evt.record;
+      const freeServer = serverBusy.findIndex(b => !b);
+      if (freeServer !== -1) {
+        serverBusy[freeServer] = true;
+        serverPatients[freeServer]++;
+        const serviceEnd = now + rec.serviceTime;
+        completedRecords.push({
+          ...rec,
+          serviceStart: now,
+          serviceEnd,
+          waitTime: 0,
+          serverId: freeServer + 1,
+        });
+        push({ time: serviceEnd, type: 'departure', record: rec, serverId: freeServer });
+      } else {
+        queue.push(rec);
+        if (discipline === 'Priority') queue.sort((a, b) => b.priority - a.priority);
+      }
+
+      eventIndex++;
+      if (eventIndex < sorted.length) {
+        push({ time: sorted[eventIndex].arrivalTime, type: 'arrival', record: sorted[eventIndex] });
+      }
+    } else if (evt.type === 'departure' && evt.serverId !== undefined) {
+      const sid = evt.serverId;
+      serverBusy[sid] = false;
+      const servedRec = completedRecords.find(r => r.id === evt.record.id);
+      if (servedRec) serverBusyTime[sid] += servedRec.serviceTime;
+
+      if (queue.length > 0) {
+        const next = discipline === 'LIFO' ? queue.pop()! : queue.shift()!;
+        serverBusy[sid] = true;
+        serverPatients[sid]++;
+        const serviceEnd = now + next.serviceTime;
+        completedRecords.push({
+          ...next,
+          serviceStart: now,
+          serviceEnd,
+          waitTime: now - next.arrivalTime,
+          serverId: sid + 1,
+        });
+        push({ time: serviceEnd, type: 'departure', record: next, serverId: sid });
+      }
+    }
+
+    const pct = (eventIndex / sorted.length) * 100;
+    onProgress(Math.min(pct, 99));
+    await new Promise(r => setTimeout(r, 0));
+  }
+
+  onProgress(100);
+  return buildResult(config, completedRecords, serverBusyTime, serverPatients, duration);
+}
+
+// ─── Result builder (shared) ───────────────────────────────────────────────────
 
 function buildResult(
   config: SimulationConfig,
@@ -185,7 +268,6 @@ function buildResult(
   const avgWait     = waitTimes.reduce((a, b) => a + b, 0) / n;
   const avgSvc      = svcTimes.reduce((a, b) => a + b, 0) / n;
   const avgSys      = sysTimes.reduce((a, b) => a + b, 0) / n;
-  const maxQ        = Math.max(...records.map(r => r.waitTime > 0 ? 1 : 0));
   const served0     = waitTimes.filter(w => w === 0).length;
   const servedU15   = waitTimes.filter(w => w > 0 && w < 15).length;
   const served1530  = waitTimes.filter(w => w >= 15 && w <= 30).length;
@@ -225,6 +307,13 @@ function buildResult(
 
   const metrics = computeDerivedMetrics(config);
 
+  // Approximate max queue length
+  let maxQueue = 0;
+  for (let t = 0; t <= duration; t += 10) {
+    const inQueue = records.filter(r => r.arrivalTime <= t && r.serviceStart > t).length;
+    if (inQueue > maxQueue) maxQueue = inQueue;
+  }
+
   return {
     runId: `sim-${Date.now()}`,
     scenarioName: 'Simulation Run',
@@ -237,14 +326,14 @@ function buildResult(
     throughput: parseFloat(Math.min(avgUtil + 5, 99.9).toFixed(1)),
     patientsPerHour: parseFloat((n / (duration / 60)).toFixed(1)),
     totalPatients: n,
-    maxQueueLength: Math.ceil(metrics.lq * 3),
-    maxQueueTime: 150,
+    maxQueueLength: maxQueue,
+    maxQueueTime: Math.max(...waitTimes, 0),
     serverUtilization: parseFloat(avgUtil.toFixed(1)),
     idleServerTime: parseFloat((100 - avgUtil).toFixed(1)),
     probWaiting: parseFloat((metrics.erlangC * 100).toFixed(1)),
     waitTimeBuckets: buckets,
     hourlyData,
-    patientRecords: records.slice(0, 200), // cap for UI perf
+    patientRecords: records.slice(0, 200),
     serverStats,
     servedImmediately: pct(served0),
     waitedUnder15: pct(servedU15),

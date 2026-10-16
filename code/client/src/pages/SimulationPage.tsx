@@ -62,7 +62,7 @@ const SimulationPage: React.FC = () => {
 
       {!hasData && (
         <div className="alert alert-warning" style={{ marginBottom: '20px', padding: '12px', background: 'rgba(255,193,7,0.1)', borderLeft: '4px solid #ffc107', borderRadius: '4px' }}>
-          📂 You haven't uploaded any patient data.
+           You haven't uploaded any patient data.
           <button className="btn-link" onClick={() => { window.location.href = '/upload'; }} style={{ marginLeft: '10px' }}>
             Go to Upload Page →
           </button>

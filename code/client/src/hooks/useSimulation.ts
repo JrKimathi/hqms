@@ -3,13 +3,11 @@ import { useSimulationStore } from '../store/simulationStore';
 import type { SimulationConfig, SimulationRun } from '../types/simulation';
 import { post } from '../services/api';
 import type { SimulationResult } from '../types/results';
-import { computeDerivedMetrics } from '../services/simulationService';
+import { computeDerivedMetrics, runSimulation, runTraceSimulation } from '../services/simulationService';
 
 export function useSimulation() {
   const store = useSimulationStore();
   const abortRef = useRef(false);
-
-  // Compute derived metrics from current config
   const derived = useMemo(() => computeDerivedMetrics(store.config), [store.config]);
 
   const start = useCallback(async (overrideConfig?: Partial<SimulationConfig>) => {
@@ -30,8 +28,30 @@ export function useSimulation() {
     store.setCurrentRun(run);
 
     try {
-      const response = await post<SimulationResult>('/simulate', config);
-      const result = response.data;
+      let result: SimulationResult;
+
+      // Try backend first
+      try {
+        const sanitizedConfig = {
+          servers: config.servers,
+          arrivalRate: config.arrivalRate,
+          serviceTime: config.serviceTime,
+          simDuration: config.simDuration,
+          discipline: config.discipline,
+          priorityEnabled: config.priorityEnabled || false,
+          warmUpPeriod: config.warmUpPeriod || 30,
+        };
+        const response = await post<SimulationResult>('/simulate', sanitizedConfig);
+        result = response.data;
+      } catch (backendErr) {
+        console.warn('Backend unavailable, falling back to client-side simulation', backendErr);
+        // Client-side simulation – use trace simulation if records exist
+        if (store.uploadedRecords.length > 0) {
+          result = await runTraceSimulation(config, store.uploadedRecords, (pct) => store.updateRunProgress(pct));
+        } else {
+          result = await runSimulation(config, (pct) => store.updateRunProgress(pct));
+        }
+      }
 
       if (!abortRef.current) {
         result.scenarioName = run.scenarioName;
@@ -40,11 +60,9 @@ export function useSimulation() {
       }
     } catch (err) {
       console.error('Simulation error:', err);
-      alert('Simulation failed. Make sure the backend is running (python main.py)');
+      alert('❌ Simulation failed. Check console for details.');
       store.setCurrentRun({ ...run, status: 'error', progress: 0 });
     }
-
-
   }, [store]);
 
   const abort = useCallback(() => {
@@ -66,7 +84,7 @@ export function useSimulation() {
     setActiveScenario: store.setActiveScenario,
     loadScenario: store.loadScenario,
     addScenario: store.addScenario,
-    removeScenario: store.removeScenario, 
+    removeScenario: store.removeScenario,
     currentRun: store.currentRun,
     isRunning: store.currentRun?.status === 'running',
     isDone: store.currentRun?.status === 'complete',

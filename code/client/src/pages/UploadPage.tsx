@@ -9,11 +9,9 @@ const UploadPage: React.FC = () => {
     files,
     uploadedFiles,
     records,
-    errors,
     isDragOver,
     setIsDragOver,
     isParsing,
-    isReady,
     inputRef,
     handleDrop,
     handleFileInput,
@@ -23,21 +21,10 @@ const UploadPage: React.FC = () => {
     downloadSample,
   } = useUpload();
 
-  // Submit files to backend
-  const handleSubmit = async () => {
+  // Submit only confirms the already‑parsed data – no re‑reading of files
+  const handleSubmit = () => {
     if (files.length === 0) return;
-    // The useUpload hook doesn't automatically upload; we need to call uploadFiles
-    // Import uploadFiles from '../services/uploadService'
-    const { uploadFiles } = await import('../services/uploadService');
-    try {
-      const session = await uploadFiles(files);
-      console.log('Upload successful:', session);
-      // Show success feedback (you can add a toast or state)
-      alert(`Uploaded ${session.totalRecords} records successfully!`);
-    } catch (err) {
-      console.error(err);
-      alert('Upload failed. Check console for details.');
-    }
+    alert(`✅ Successfully processed ${records.length} patient records!`);
   };
 
   return (

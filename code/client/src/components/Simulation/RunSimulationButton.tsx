@@ -77,7 +77,7 @@ const RunSimulationButton: React.FC<RunSimulationButtonProps> = ({
           {isRunning && (
             <div className="rsb-log-line rsb-log-line--live">
               <span className="rsb-log-time">live</span>
-              <span><span className="rsb-cursor">▋</span> Processing events…</span>
+              <span><span className="rsb-cursor"></span> Processing events…</span>
             </div>
           )}
         </div>

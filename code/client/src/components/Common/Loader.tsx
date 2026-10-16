@@ -1,6 +1,5 @@
 import React from 'react';
-import '../../styles/Loader.css'; //fix file path here
-
+import '../../styles/Loader.css'; 
 interface LoaderProps {
   message?: string;
   size?: 'sm' | 'md' | 'lg';

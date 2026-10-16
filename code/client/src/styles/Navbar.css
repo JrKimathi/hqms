@@ -126,3 +126,62 @@
 .navbar-avatar:hover {
     transform: scale(1.08);
 }
+
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background: var(--accent-cyan-dim);
+    color: var(--accent-cyan);
+    transform: scale(1.05);
+}
+
+/* Mobile Menu Toggle Button */
+.menu-toggle {
+    display: none;
+    /* Hidden by default on desktop */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 8px;
+    margin-right: 12px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.menu-toggle:hover {
+    background: var(--accent-cyan-dim);
+    color: var(--accent-cyan);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .navbar {
+        /* Remove the massive left padding meant for the sidebar */
+        padding: 0 16px;
+    }
+
+    .menu-toggle {
+        display: flex;
+        /* Show the hamburger icon */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar-breadcrumb {
+        display: none;
+        /* hide breadcrumbs on mobile to save space */
+    }
+}

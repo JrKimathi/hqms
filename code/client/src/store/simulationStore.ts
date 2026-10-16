@@ -1,11 +1,10 @@
 /**
  * simulationStore.ts
  * Zustand global store for simulation state.
- * Install: npm install zustand
  */
 import { create } from 'zustand';
 import type { SimulationConfig, Scenario, SimulationRun, QueueDiscipline } from '../types/simulation';
-import type { SimulationResult } from '../types/results';
+import type { SimulationResult, PatientRecord } from '../types/results';
 
 const DEFAULT_CONFIG: SimulationConfig = {
   servers: 3,
@@ -50,7 +49,9 @@ interface SimulationStore {
 
   // Upload state
   uploadedRecordCount: number;
+  uploadedRecords: PatientRecord[];          // <-- added
   setUploadedRecordCount: (n: number) => void;
+  setUploadedRecords: (records: PatientRecord[]) => void; // <-- added
 }
 
 let scenarioIdCounter = 3;
@@ -119,5 +120,7 @@ export const useSimulationStore = create<SimulationStore>((set, get) => ({
   addResult: (r) => set(s => ({ results: [...s.results, r] })),
 
   uploadedRecordCount: 0,
+  uploadedRecords: [],
   setUploadedRecordCount: (n) => set({ uploadedRecordCount: n }),
+  setUploadedRecords: (records) => set({ uploadedRecords: records, uploadedRecordCount: records.length }),
 }));

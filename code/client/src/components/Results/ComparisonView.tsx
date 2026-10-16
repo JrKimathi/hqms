@@ -16,7 +16,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ rows, baseline, scenari
   if (!baseline || !scenario || rows.length === 0) {
     return (
       <div className="cv-empty card">
-        <div className="cv-empty-icon">⚖️</div>
+        <div className="cv-empty-icon"></div>
         <p className="cv-empty-title">No comparison available yet</p>
         <p className="cv-empty-sub">Run at least two simulations to compare scenarios side by side.</p>
       </div>
@@ -76,7 +76,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ rows, baseline, scenari
 
       {/* Verdict */}
       <div className="card cv-verdict">
-        <div className="cv-verdict-icon">📊</div>
+        <div className="cv-verdict-icon"></div>
         <div>
           <p className="cv-verdict-title">Simulation Verdict</p>
           <p className="cv-verdict-body">

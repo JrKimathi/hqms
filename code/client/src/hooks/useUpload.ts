@@ -1,6 +1,5 @@
 /**
- * useUpload.ts
- * Manages drag-and-drop file upload state and parsing pipeline.
+ * useUpload.ts – stores parsed records into global store
  */
 import { useState, useCallback, useRef } from 'react';
 import { parseFilesLocally, downloadSampleCSV } from '../services/uploadService';
@@ -26,7 +25,7 @@ export function useUpload() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isParsing, setIsParsing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const setCount = useSimulationStore(s => s.setUploadedRecordCount);
+  const setUploadedRecords = useSimulationStore(s => s.setUploadedRecords);
 
   const addFiles = useCallback(async (incoming: File[]) => {
     const valid = incoming.filter(f => /\.(csv|xlsx|xls|json)$/i.test(f.name));
@@ -38,11 +37,12 @@ export function useUpload() {
       setUploadedFiles(prev => [...prev, ...uf]);
       setRecords(prev => [...prev, ...parsed]);
       setErrors(prev => [...prev, ...totalErrors]);
-      setCount(records.length + parsed.length);
+      // Store parsed records globally for simulation
+      setUploadedRecords(parsed);
     } finally {
       setIsParsing(false);
     }
-  }, [records.length, setCount]);
+  }, [setUploadedRecords]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -64,8 +64,8 @@ export function useUpload() {
     setUploadedFiles([]);
     setRecords([]);
     setErrors([]);
-    setCount(0);
-  }, [setCount]);
+    setUploadedRecords([]);
+  }, [setUploadedRecords]);
 
   const openFilePicker = useCallback(() => inputRef.current?.click(), []);
 

@@ -82,7 +82,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({
 
       {/* Run-optimised CTA */}
       <div className="card rec-card rec-card--cta">
-        <div className="rec-cta-icon">🚀</div>
+        <div className="rec-cta-icon"></div>
         <p className="rec-cta-title">Apply All High-Priority Changes</p>
         <p className="rec-cta-body">
           Run a new simulation with all {highCount} high-priority changes applied

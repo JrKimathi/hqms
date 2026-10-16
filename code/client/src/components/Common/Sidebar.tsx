@@ -11,6 +11,8 @@ interface NavItem {
 interface SidebarProps {
   activePage: string;
   onNavigate: (page: string) => void;
+  isOpen: boolean;             // NEW
+  toggleSidebar: () => void;   // NEW
 }
 
 const DashboardIcon = () => (
@@ -72,26 +74,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, onNavigate }) => {
           >
             <span className="sidebar-item-icon">{item.icon}</span>
             <span className="sidebar-item-label">{item.label}</span>
+            
             {item.badge && <span className="sidebar-item-badge">{item.badge}</span>}
             {activePage === item.id && <span className="sidebar-item-indicator" />}
           </button>
         ))}
       </nav>
 
-      <div className="sidebar-footer">
-        <div className="sidebar-footer-card">
-          <div className="sfc-icon">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 1.5C4.41 1.5 1.5 4.41 1.5 8S4.41 14.5 8 14.5 14.5 11.59 14.5 8 11.59 1.5 8 1.5z" stroke="var(--accent-cyan)" strokeWidth="1.2"/>
-              <path d="M8 7v4M8 5.5v.5" stroke="var(--accent-cyan)" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <div className="sfc-title">Hospital Queue Sim</div>
-            <div className="sfc-sub">v1.0.0 — Academic</div>
-          </div>
-        </div>
-      </div>
+      
     </aside>
   );
 };
