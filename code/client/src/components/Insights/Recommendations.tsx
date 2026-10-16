@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import type { SimulationResult } from '../../types/results';
+import type { Insight } from './InsightsPanel';
 
 import '../../styles/Recommendations.css';
 
@@ -15,16 +16,13 @@ interface RecommendationsProps {
   onRunOptimised?: () => void;
 }
 
-const PRIORITY_COLORS: Record<string, string> = {
-  High: 'red', Medium: 'amber', Low: 'green',
-};
-
 const Recommendations: React.FC<RecommendationsProps> = ({
   insights, result, onRunOptimised,
 }) => {
-  const highCount   = insights.filter(i => i.priority === 'High').length;
-  const medCount    = insights.filter(i => i.priority === 'Medium').length;
-  const lowCount    = insights.filter(i => i.priority === 'Low').length;
+  // Fixed: use lowercase priority values to match the Insight interface
+  const highCount   = insights.filter(i => i.priority === 'high').length;
+  const medCount    = insights.filter(i => i.priority === 'medium').length;
+  const lowCount    = insights.filter(i => i.priority === 'low').length;
   const total       = insights.length;
 
   /* Aggregate projected improvements from insight impact strings */
@@ -82,7 +80,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({
 
       {/* Run-optimised CTA */}
       <div className="card rec-card rec-card--cta">
-        <div className="rec-cta-icon">🚀</div>
+        <div className="rec-cta-icon"></div>
         <p className="rec-cta-title">Apply All High-Priority Changes</p>
         <p className="rec-cta-body">
           Run a new simulation with all {highCount} high-priority changes applied

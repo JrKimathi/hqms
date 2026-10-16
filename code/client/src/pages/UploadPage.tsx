@@ -8,12 +8,9 @@ const UploadPage: React.FC = () => {
   const {
     files,
     uploadedFiles,
-    records,
-    errors,
     isDragOver,
     setIsDragOver,
     isParsing,
-    isReady,
     inputRef,
     handleDrop,
     handleFileInput,

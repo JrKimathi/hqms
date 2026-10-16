@@ -3,13 +3,13 @@
  * Discrete-event M/M/c simulation engine.
  * Runs entirely in-browser via a priority-queue event loop.
  */
-import type { SimulationConfig, SimulationEvent, DerivedMetrics } from '../types/simulation';
+import type { SimulationConfig, DerivedMetrics } from '../types/simulation';
 import type {
   SimulationResult, WaitTimeBucket, HourlyDataPoint,
   PatientRecord, ServerStats
 } from '../types/results';
 
-// ─── Erlang-C helpers ─────────────────────────────────────────────────────────
+// Erlang-C helpers
 
 export function computeDerivedMetrics(config: SimulationConfig): DerivedMetrics {
   const { servers: c, arrivalRate, serviceTime } = config;
@@ -45,13 +45,13 @@ export function computeDerivedMetrics(config: SimulationConfig): DerivedMetrics 
   };
 }
 
-// ─── Pseudo-random helpers ────────────────────────────────────────────────────
+//  Pseudo-random helpers 
 
 function exponential(rate: number): number {
   return -Math.log(1 - Math.random()) / rate;
 }
 
-// ─── Simulation engine ────────────────────────────────────────────────────────
+//  Simulation engine 
 
 interface EventEntry {
   time: number;
@@ -70,7 +70,6 @@ export async function runSimulation(
   const mu     = 1 / avgSvc;
 
   // State
-  const events: EventEntry[] = [];
   const patientRecords: PatientRecord[] = [];
   const serverBusy: boolean[] = new Array(c).fill(false);
   const serverBusyTime: number[] = new Array(c).fill(0);
@@ -167,7 +166,7 @@ export async function runSimulation(
   return buildResult(config, patientRecords, serverBusyTime, serverPatients, simDuration);
 }
 
-// ─── Result builder ───────────────────────────────────────────────────────────
+// ─── Result builder 
 
 function buildResult(
   config: SimulationConfig,
@@ -185,7 +184,6 @@ function buildResult(
   const avgWait     = waitTimes.reduce((a, b) => a + b, 0) / n;
   const avgSvc      = svcTimes.reduce((a, b) => a + b, 0) / n;
   const avgSys      = sysTimes.reduce((a, b) => a + b, 0) / n;
-  const maxQ        = Math.max(...records.map(r => r.waitTime > 0 ? 1 : 0));
   const served0     = waitTimes.filter(w => w === 0).length;
   const servedU15   = waitTimes.filter(w => w > 0 && w < 15).length;
   const served1530  = waitTimes.filter(w => w >= 15 && w <= 30).length;
